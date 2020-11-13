@@ -1,6 +1,7 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { RestaurantComponent } from './restaurant.component';
+import { ImageUrlPipe } from '../image-url.pipe';
 
 describe('RestaurantComponent', () => {
   let component: RestaurantComponent;
@@ -8,7 +9,7 @@ describe('RestaurantComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RestaurantComponent ]
+      declarations: [ RestaurantComponent, ImageUrlPipe ]
     })
     .compileComponents();
   });
