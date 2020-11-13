@@ -1,6 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 
-import { RestaurantService } from './restaurant.service';
+import { RestaurantService, ResponseData } from './restaurant.service';
+import { Restaurant } from './restaurant';
+
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 describe('RestaurantService', () => {
@@ -15,8 +17,10 @@ describe('RestaurantService', () => {
   }));
 
   beforeEach(() => {
-    httpMock = TestBed.get(HttpTestingController);
-    restaurantService = TestBed.get(RestaurantService);
+    // httpMock = TestBed.get(HttpTestingController);
+    // restaurantService = TestBed.get(RestaurantService);
+    httpMock = TestBed.inject(HttpTestingController);
+    restaurantService = TestBed.inject(RestaurantService);
   });
 
   it('should be created', () => {
@@ -75,7 +79,7 @@ describe('RestaurantService', () => {
             }]
      };
 
-    restaurantService.getRestaurants().subscribe((restaurants:any) => {
+    restaurantService.getRestaurants().subscribe((restaurants: ResponseData) => {
       expect(restaurants).toEqual(mockRestaurants);
     });
 
@@ -87,6 +91,37 @@ describe('RestaurantService', () => {
     req.flush(mockRestaurants);
 
     httpMock.verify();
+  });
+
+  it('can set proper properties on restaurant type', () => {
+    let restaurant: Restaurant = {
+      name:"Taco Joint",
+      slug:"taco-joint",
+      images:{
+        thumbnail:"node_modules/place-my-order-assets/images/4-thumbnail.jpg",
+        owner:"node_modules/place-my-order-assets/images/2-owner.jpg",
+        banner:"node_modules/place-my-order-assets/images/2-banner.jpg"
+      },
+      menu:{
+        lunch:[
+          {name:"Beef Tacos","price":15.99},
+          {name:"Chicken Tacos","price":15.99},
+          {name:"Guacamole","price":25.99}
+        ],
+        dinner:[
+          {name:"Shrimp Tacos","price":21.99},
+          {name:"Chicken Enchilada","price":23.99},
+          {name:"Elotes","price":35.99}
+        ]
+      },
+      address:{
+        street:"13 N 21st St",
+        city:"Chicago","state":"IL","zip":"53295"
+      },
+      _id:"xugqxQIX5dfgdgTLBv"
+    }
+    //will error if interface isn't implemented correctly
+    expect(true).toBe(true);
   });
 
 });

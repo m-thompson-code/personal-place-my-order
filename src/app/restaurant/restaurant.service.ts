@@ -4,6 +4,12 @@ import { Observable } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
 
+import { Restaurant } from './restaurant';
+
+export interface ResponseData {
+  data: Restaurant[];
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -11,7 +17,7 @@ export class RestaurantService {
 
   constructor(private httpClient: HttpClient) { }
 
-  public getRestaurants(): Observable<any> {
-    return this.httpClient.get<any>(`${environment.apiUrl}/restaurants`);
+  public getRestaurants(): Observable<ResponseData> {
+    return this.httpClient.get<ResponseData>(`${environment.apiUrl}/restaurants`);
   }
 }
