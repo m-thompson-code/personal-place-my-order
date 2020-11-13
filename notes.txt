@@ -1,0 +1,15 @@
+src/app/app.module.ts
+
+This file is the root module for our app. Every Angular app has at least one module that determines how to compile and launch an app. It uses the @NgModule decorator with four properties:
+
+
+declarations [array]: where we include components, directives, and pipes that will be used by this module.
+
+imports [array]: where we include any other modules our app needs to use. This may include 3rd party modules like bootstrap datepickers, or modules we've created.
+
+providers [array]: where we include services that we want used at the global app level
+
+bootstrap [array]: where we include the root AppModule - this is the main Application view that hosts all of our other app views.
+
+source: https://angular.io/guide/architecture-services#dependency-injection-di
+

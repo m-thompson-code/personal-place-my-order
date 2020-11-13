@@ -127,5 +127,8 @@
       }
     }
   },
-  "defaultProject": "personal-place-my-order"
+  "defaultProject": "personal-place-my-order",
+  "cli": {
+    "analytics": "fc7b187d-b34d-42f0-b94a-23d8635dab6b"
+  }
 }
