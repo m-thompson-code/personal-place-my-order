@@ -19,3 +19,5 @@ ngIf templateRef
 
 ngClass vs class
 
+
+<base href="/> and the importance of how Angular router coupose URLs
