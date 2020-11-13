@@ -5,10 +5,23 @@
     <!-- inside this container, show the following markup for each restaurant -->
     <ng-container *ngIf="restaurants.length">
         <div *ngFor="let restaurant of restaurants" class="restaurant">
+            <img src="{{ restaurant.images.thumbnail }}" width="100" height="100">
             <h3>{{ restaurant.name }}</h3>
-            <div class="hours-price">
 
+            <div class="address" *ngIf="restaurant.address">
+                {{ restaurant.address.street }}<br />{{ restaurant.address.city }}, {{ restaurant.address.state }} {{ restaurant.address.zip }}
             </div>
+
+            <div class="hours-price">
+                $$$<br />
+                Hours: M-F 10am-11pm
+                <span class="open-now">Open Now</span>
+            </div>
+
+            <a class="btn" [routerLink]="['/restaurants', restaurant.slug]">
+                Details
+              </a>
+            <br />
         </div>
     </ng-container>
     <!-- end of restaurant markup -->
