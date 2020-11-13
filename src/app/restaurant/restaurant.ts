@@ -1,16 +1,11 @@
 interface Item {
     name: string;
+    price: number;
 }
 
 interface Menu {
-    lunch: {
-        name: string;
-        price: number;
-    }[];
-    dinner: {
-        name: string;
-        price: number;
-    }[];
+    lunch: Item[];
+    dinner: Item[];
 }
 
 interface Address {
@@ -26,7 +21,7 @@ interface Images {
     banner: string;
 }
 
-export interface Restaurant extends Item {
+export interface Restaurant {
     name: string;
     slug: string;
     images: Images;
