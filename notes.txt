@@ -21,3 +21,9 @@ ngClass vs class
 
 
 <base href="/> and the importance of how Angular router coupose URLs
+
+
+routerLinkActive directive and routerLinkActiveOptions Input
+
+
+Adding an Active Class with Template Variable using RouterLinkActive ()
