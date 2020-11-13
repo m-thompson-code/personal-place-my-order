@@ -13,3 +13,9 @@ bootstrap [array]: where we include the root AppModule - this is the main Applic
 
 source: https://angular.io/guide/architecture-services#dependency-injection-di
 
+
+ngIf templateRef
+
+
+ngClass vs class
+

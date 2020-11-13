@@ -1,0 +1,15 @@
+<div class="restaurants">
+    <h2 class="page-header">Restaurants</h2>
+    <!-- if restaurants has a length show the list -->
+    
+    <!-- inside this container, show the following markup for each restaurant -->
+    <ng-container *ngIf="restaurants.length">
+        <div *ngFor="let restaurant of restaurants" class="restaurant">
+            <h3>{{ restaurant.name }}</h3>
+            <div class="hours-price">
+
+            </div>
+        </div>
+    </ng-container>
+    <!-- end of restaurant markup -->
+</div>
