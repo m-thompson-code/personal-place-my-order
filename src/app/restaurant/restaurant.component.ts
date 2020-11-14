@@ -3,10 +3,10 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 import { Restaurant } from './restaurant';
-import { ResponseData, RestaurantService } from './restaurant.service';
+import { City, ResponseData, RestaurantService, State } from './restaurant.service';
 
-export interface Data {
-  value: Restaurant[];
+export interface Data<T> {
+  value: T[];
   isPending: boolean;
 }
 
@@ -19,20 +19,25 @@ export class RestaurantComponent implements OnInit, OnDestroy {
   // public form?: FormGroup;
   public form!: FormGroup; // Going to use this syntax to avoid having to update the specs to check for undefined
 
-  public restaurants: Data = { value: [], isPending: false };
+  public restaurants: Data<Restaurant> = { value: [], isPending: false };
 
-  public states = {
-    isPending: false,
-    value: [{name: "Illinois", short: "IL"}, {name: "Wisconsin", short: "WI"}]
-  };
+  public states: Data<State> = { value: [], isPending: false };
+  // public states = {
+  //   isPending: false,
+  //   value: [{name: "Illinois", short: "IL"}, {name: "Wisconsin", short: "WI"}]
+  // };
 
-  public cities = {
-    isPending: false,
-    value: [{name: "Springfield"},{name: "Madison"}]
-  }
+  public cities: Data<City> = { value: [], isPending: false };
+  //   isPending: false,
+  //   value: [{name: "Springfield"},{name: "Madison"}]
+  // }
 
   private _sub?: Subscription;
   private _sub2?: Subscription;
+  private _sub3?: Subscription;
+  private _sub4?: Subscription;
+  private _sub5?: Subscription;
+
   constructor(private restaurantService: RestaurantService, 
     private fb: FormBuilder
   ) {
@@ -42,36 +47,13 @@ export class RestaurantComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.createForm();
 
-    this._sub2 = this.form.valueChanges.subscribe((val) => {
-      console.log(val);
-    });
-
-    this.restaurants.isPending = true;
-
-    this.restaurantService.getRestaurants().subscribe((res: ResponseData<Restaurant>) => {
-      this.restaurants.value = res.data;
-      this.restaurants.isPending = false;
-    });
-
-    // this.states.isPending = true;
-
-    // this.restaurantService.getStates().subscribe((res: ResponseData) => {
-    //   this.states.value = res.data;
-    //   this.states.isPending = false;
-    // });
-    
-    // this.cities.isPending = true;
-
-    // this.restaurantService.getCities().subscribe((res: ResponseData) => {
-    //   this.cities.value = res.data;
-    //   this.cities.isPending = false;
-    // });
+    this.getStates();
   }
 
   createForm() {
     this.form = this.fb.group({
-      state: {value: '', disabled: false},
-      city: {value: '', disabled: false},
+      state: {value: '', disabled: true},
+      city: {value: '', disabled: true},
     });
 
     this.onChanges();
@@ -86,6 +68,17 @@ export class RestaurantComponent implements OnInit, OnDestroy {
 
     const stateChanges = state__formState.valueChanges.subscribe(val => {
       console.log('state', val);
+
+      this.cities.isPending = true;
+      this.cities.value = [];
+
+      this.form.get('city')?.patchValue('');
+
+      if (val) {
+        this.getCities(val);
+      } else {
+        this.cities = { value: [], isPending: false };
+      }
     });
 
     this._sub2 = stateChanges;
@@ -98,13 +91,56 @@ export class RestaurantComponent implements OnInit, OnDestroy {
 
     const cityChanges = city__formState.valueChanges.subscribe(val => {
       console.log('city', val);
+
+      if (val) {
+        this.getRestaurants();
+      } else {
+        this.restaurants = { value: [], isPending: false };
+      }
     });
 
-    this._sub2.add(cityChanges);
+    this._sub3 = cityChanges;
+  }
+
+  getStates() {
+    this._sub4?.unsubscribe();
+
+    this._sub4 = this.restaurantService.getStates().subscribe((res: ResponseData<State>) => {
+      this.form.get('state')?.enable();
+
+      this.states.value = res.data;
+      this.states.isPending = false;
+    });
+  }
+
+  getCities(stateAbbrivation: string) {
+    this._sub5?.unsubscribe();
+
+    this._sub5 = this.restaurantService.getCities(stateAbbrivation).subscribe((res: ResponseData<City>) => {
+      this.form.get('city')?.enable();
+
+      this.cities.value = res.data;
+      this.cities.isPending = false;
+    });
+  }
+
+  getRestaurants() {
+    this.restaurants.isPending = true;
+    this.restaurants.value = [];
+
+    this._sub?.unsubscribe();
+
+    this._sub = this.restaurantService.getRestaurants().subscribe((res: ResponseData<Restaurant>) => {
+      this.restaurants.value = res.data;
+      this.restaurants.isPending = false;
+    });
   }
 
   ngOnDestroy(): void {
     this._sub?.unsubscribe();
     this._sub2?.unsubscribe();
+    this._sub3?.unsubscribe();
+    this._sub4?.unsubscribe();
+    this._sub5?.unsubscribe();
   }
 }
