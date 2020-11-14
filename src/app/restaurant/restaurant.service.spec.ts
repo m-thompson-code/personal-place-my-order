@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { RestaurantService, ResponseData } from './restaurant.service';
+import { RestaurantService, ResponseData, State, City } from './restaurant.service';
 import { Restaurant } from './restaurant';
 
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
@@ -79,7 +79,7 @@ describe('RestaurantService', () => {
             }]
      };
 
-    restaurantService.getRestaurants().subscribe((restaurants: ResponseData) => {
+    restaurantService.getRestaurants().subscribe((restaurants: ResponseData<Restaurant>) => {
       expect(restaurants).toEqual(mockRestaurants);
     });
 
@@ -122,6 +122,46 @@ describe('RestaurantService', () => {
     }
     //will error if interface isn't implemented correctly
     expect(true).toBe(true);
+  });
+
+  
+  it('should make a get request to states', () => {
+    const mockStates = {
+      data: [
+        {name: 'Missouri', short: 'MO'}
+      ]
+    };
+
+    restaurantService.getStates().subscribe((states: ResponseData<State>) => {
+      expect(states).toEqual(mockStates);
+    });
+
+    let url = 'http://localhost:7070/states';
+    const req = httpMock.expectOne(url);
+
+    expect(req.request.method).toEqual('GET');
+    req.flush(mockStates);
+
+    httpMock.verify();
+  });
+
+  it('should make a get request to cities', () => {
+    const mockCities = {
+      data: [
+        {name: 'Kansas City', state: 'MO'}
+      ]
+    };
+
+    restaurantService.getCities('MO').subscribe((cities: ResponseData<City>) => {
+      expect(cities).toEqual(mockCities);
+    });
+
+    let url = 'http://localhost:7070/cities?state=MO';
+    const req = httpMock.expectOne(url);
+    expect(req.request.method).toEqual('GET');
+    req.flush(mockCities);
+
+    httpMock.verify();
   });
 
 });
