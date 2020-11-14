@@ -42,10 +42,6 @@ export class RestaurantComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.createForm();
 
-    this._sub2 = this.form.valueChanges.subscribe((val) => {
-      console.log(val);
-    });
-
     this.restaurants.isPending = true;
 
     this.restaurantService.getRestaurants().subscribe((res: ResponseData) => {
@@ -73,6 +69,34 @@ export class RestaurantComponent implements OnInit, OnDestroy {
       state: {value: '', disabled: false},
       city: {value: '', disabled: false},
     });
+
+    this.onChanges();
+  }
+
+  onChanges(): void {
+    const state__formState = this.form.get('state');
+
+    if (!state__formState) {
+      throw new Error("Unexpected missing state form_state");
+    }
+
+    const stateChanges = state__formState.valueChanges.subscribe(val => {
+      console.log('state', val);
+    });
+
+    this._sub2 = stateChanges;
+
+    const city__formState = this.form.get('city');
+
+    if (!city__formState) {
+      throw new Error("Unexpected missing city form_state");
+    }
+
+    const cityChanges = city__formState.valueChanges.subscribe(val => {
+      console.log('city', val);
+    });
+
+    this._sub2.add(cityChanges);
   }
 
   ngOnDestroy(): void {
