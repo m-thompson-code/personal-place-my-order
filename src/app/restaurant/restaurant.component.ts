@@ -102,7 +102,7 @@ export class RestaurantComponent implements OnInit, OnDestroy {
 
     const cityChanges = city__formState.valueChanges.subscribe(val => {
       if (val) {
-        this.getRestaurants();
+        this.getRestaurants(state, val);
       }
     });
 
@@ -134,10 +134,10 @@ export class RestaurantComponent implements OnInit, OnDestroy {
     });
   }
 
-  getRestaurants() {
+  getRestaurants(state: string, city: string) {
     this._sub?.unsubscribe();
 
-    this._sub = this.restaurantService.getRestaurants().subscribe((res: ResponseData<Restaurant>) => {
+    this._sub = this.restaurantService.getRestaurants(state, city).subscribe((res: ResponseData<Restaurant>) => {
       this.restaurants.value = res.data;
       this.restaurants.isPending = false;
     });

@@ -27,8 +27,18 @@ export class RestaurantService {
 
   constructor(private httpClient: HttpClient) { }
 
-  public getRestaurants(): Observable<ResponseData<Restaurant>> {
-    return this.httpClient.get<ResponseData<Restaurant>>(`${environment.apiUrl}/restaurants`);
+  public getRestaurants(state?: string, city?: string): Observable<ResponseData<Restaurant>> {
+    let params = new HttpParams();
+    
+    if (state) {
+      params = params.set('filter[address.state]', state);
+    }
+
+    if (city) {
+      params = params.set('filter[address.city]', city);
+    }
+
+    return this.httpClient.get<ResponseData<Restaurant>>(`${environment.apiUrl}/restaurants`, {params});
   }
 
   public getStates(): Observable<ResponseData<State>> {

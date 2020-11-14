@@ -1,108 +1,108 @@
-import { ComponentFixture, TestBed, tick, fakeAsync, waitForAsync } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, tick, fakeAsync, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs'; 
-import { ImageUrlPipe } from '../image-url.pipe';
-import { ReactiveFormsModule } from '@angular/forms';
 
 import { RestaurantComponent } from './restaurant.component';
 import { RestaurantService } from './restaurant.service';
+import { ImageUrlPipe } from '../image-url.pipe';
+import { ReactiveFormsModule } from '@angular/forms';
 
+const restaurantAPIResponse = {
+  data: [{
+    "name": "Poutine Palace",
+    "slug": "poutine-palace",
+    "images": {
+      "thumbnail": "node_modules/place-my-order-assets/images/4-thumbnail.jpg",
+      "owner": "node_modules/place-my-order-assets/images/3-owner.jpg",
+      "banner": "node_modules/place-my-order-assets/images/2-banner.jpg"
+    },
+    "menu": {
+      "lunch": [
+        {
+          "name": "Crab Pancakes with Sorrel Syrup",
+          "price": 35.99
+        },
+        {
+          "name": "Steamed Mussels",
+          "price": 21.99
+        },
+        {
+          "name": "Spinach Fennel Watercress Ravioli",
+          "price": 35.99
+        }
+      ],
+      "dinner": [
+        {
+          "name": "Gunthorp Chicken",
+          "price": 21.99
+        },
+        {
+          "name": "Herring in Lavender Dill Reduction",
+          "price": 45.99
+        },
+        {
+          "name": "Chicken with Tomato Carrot Chutney Sauce",
+          "price": 45.99
+        }
+      ]
+    },
+    "address": {
+      "street": "230 W Kinzie Street",
+      "city": "Green Bay",
+      "state": "WI",
+      "zip": "53205"
+    },
+    "_id": "3ZOZyTY1LH26LnVw"
+  },
+  {
+    "name": "Cheese Curd City",
+    "slug": "cheese-curd-city",
+    "images": {
+      "thumbnail": "node_modules/place-my-order-assets/images/2-thumbnail.jpg",
+      "owner": "node_modules/place-my-order-assets/images/3-owner.jpg",
+      "banner": "node_modules/place-my-order-assets/images/2-banner.jpg"
+    },
+    "menu": {
+      "lunch": [
+        {
+          "name": "Ricotta Gnocchi",
+          "price": 15.99
+        },
+        {
+          "name": "Gunthorp Chicken",
+          "price": 21.99
+        },
+        {
+          "name": "Garlic Fries",
+          "price": 15.99
+        }
+      ],
+      "dinner": [
+        {
+          "name": "Herring in Lavender Dill Reduction",
+          "price": 45.99
+        },
+        {
+          "name": "Truffle Noodles",
+          "price": 14.99
+        },
+        {
+          "name": "Charred Octopus",
+          "price": 25.99
+        }
+      ]
+    },
+    "address": {
+      "street": "2451 W Washburne Ave",
+      "city": "Green Bay",
+      "state": "WI",
+      "zip": "53295"
+    },
+    "_id": "Ar0qBJHxM3ecOhcr"
+  }]};
 class MockRestaurantService {
-  getRestaurants() {
-    return of({
-      data: [{
-        "name": "Poutine Palace",
-        "slug": "poutine-palace",
-        "images": {
-          "thumbnail": "node_modules/place-my-order-assets/images/4-thumbnail.jpg",
-          "owner": "node_modules/place-my-order-assets/images/3-owner.jpg",
-          "banner": "node_modules/place-my-order-assets/images/2-banner.jpg"
-        },
-        "menu": {
-          "lunch": [
-            {
-              "name": "Crab Pancakes with Sorrel Syrup",
-              "price": 35.99
-            },
-            {
-              "name": "Steamed Mussels",
-              "price": 21.99
-            },
-            {
-              "name": "Spinach Fennel Watercress Ravioli",
-              "price": 35.99
-            }
-          ],
-          "dinner": [
-            {
-              "name": "Gunthorp Chicken",
-              "price": 21.99
-            },
-            {
-              "name": "Herring in Lavender Dill Reduction",
-              "price": 45.99
-            },
-            {
-              "name": "Chicken with Tomato Carrot Chutney Sauce",
-              "price": 45.99
-            }
-          ]
-        },
-        "address": {
-          "street": "230 W Kinzie Street",
-          "city": "Green Bay",
-          "state": "WI",
-          "zip": "53205"
-        },
-        "_id": "3ZOZyTY1LH26LnVw"
-      },
-      {
-        "name": "Cheese Curd City",
-        "slug": "cheese-curd-city",
-        "images": {
-          "thumbnail": "node_modules/place-my-order-assets/images/2-thumbnail.jpg",
-          "owner": "node_modules/place-my-order-assets/images/3-owner.jpg",
-          "banner": "node_modules/place-my-order-assets/images/2-banner.jpg"
-        },
-        "menu": {
-          "lunch": [
-            {
-              "name": "Ricotta Gnocchi",
-              "price": 15.99
-            },
-            {
-              "name": "Gunthorp Chicken",
-              "price": 21.99
-            },
-            {
-              "name": "Garlic Fries",
-              "price": 15.99
-            }
-          ],
-          "dinner": [
-            {
-              "name": "Herring in Lavender Dill Reduction",
-              "price": 45.99
-            },
-            {
-              "name": "Truffle Noodles",
-              "price": 14.99
-            },
-            {
-              "name": "Charred Octopus",
-              "price": 25.99
-            }
-          ]
-        },
-        "address": {
-          "street": "2451 W Washburne Ave",
-          "city": "Green Bay",
-          "state": "WI",
-          "zip": "53295"
-        },
-        "_id": "Ar0qBJHxM3ecOhcr"
-      }]}
-            )
+  getRestaurants(state: any, city: any) {// typing as any to get past lint errors
+    return of(restaurantAPIResponse)
   }
 
   getStates() {
@@ -123,12 +123,13 @@ class MockRestaurantService {
 describe('RestaurantComponent', () => {
   let component: RestaurantComponent;
   let fixture: ComponentFixture<RestaurantComponent>;
-
+  let injectedService: any; // typing as any to get past unknown type when later error
+  
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         RouterTestingModule,
-        ReactiveFormsModule,
+        ReactiveFormsModule
       ],
       providers: [{
         provide: RestaurantService,
@@ -137,6 +138,7 @@ describe('RestaurantComponent', () => {
       declarations: [ RestaurantComponent, ImageUrlPipe ]
     })
     .compileComponents();
+    injectedService = TestBed.inject(RestaurantService);
   }));
 
   beforeEach(() => {
@@ -166,8 +168,8 @@ describe('RestaurantComponent', () => {
     const fixture = TestBed.createComponent(RestaurantComponent);
     fixture.detectChanges();
     tick(501);
-    fixture.componentInstance.form.get('state')?.patchValue('CA');// Had to add the optional postfix to allow for types to be happy here
-    fixture.componentInstance.form.get('city')?.patchValue('Sacramento');// Had to add the optional postfix to allow for types to be happy here
+    fixture.componentInstance.form.get('state')?.patchValue('CA');
+    fixture.componentInstance.form.get('city')?.patchValue('Sacramento');
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
     let restaurantDivs = compiled.getElementsByClassName('restaurant');
@@ -180,8 +182,8 @@ describe('RestaurantComponent', () => {
     const fixture = TestBed.createComponent(RestaurantComponent);
     fixture.detectChanges();
     tick(501);
-    fixture.componentInstance.form.get('state')?.patchValue('CA');// Had to add the optional postfix to allow for types to be happy here
-    fixture.componentInstance.form.get('city')?.patchValue('Sacramento');// Had to add the optional postfix to allow for types to be happy here
+    fixture.componentInstance.form.get('state')?.patchValue('CA');
+    fixture.componentInstance.form.get('city')?.patchValue('Sacramento');
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
     expect(compiled.querySelector('.restaurant h3').textContent).toContain('Poutine Palace');
@@ -191,8 +193,8 @@ describe('RestaurantComponent', () => {
     const fixture = TestBed.createComponent(RestaurantComponent);
     fixture.detectChanges();
     tick();
-    fixture.componentInstance.form.get('state')?.patchValue('CA');// Had to add the optional postfix to allow for types to be happy here
-    fixture.componentInstance.form.get('city')?.patchValue('Sacramento');// Had to add the optional postfix to allow for types to be happy here
+    fixture.componentInstance.form.get('state')?.patchValue('CA');
+    fixture.componentInstance.form.get('city')?.patchValue('Sacramento');
     fixture.detectChanges();
     let expectedRestaurants = {
       value: [{
@@ -334,7 +336,6 @@ describe('RestaurantComponent', () => {
     expect(citySelect).toBeTruthy();
   });
 
-  
   it('should set states value to states response data and set isPending to false', <any>fakeAsync((): void => {
     const fixture = TestBed.createComponent(RestaurantComponent);
     fixture.detectChanges();
@@ -366,7 +367,7 @@ describe('RestaurantComponent', () => {
     const fixture = TestBed.createComponent(RestaurantComponent);
     fixture.detectChanges();
     tick();
-    fixture.componentInstance.form.get('state')?.patchValue('CA');// Had to add the optional postfix to allow for types to be happy here
+    fixture.componentInstance.form.get('state')?.patchValue('CA');
     fixture.detectChanges();
     let expectedCities = {
       value: [
@@ -382,7 +383,7 @@ describe('RestaurantComponent', () => {
     const fixture = TestBed.createComponent(RestaurantComponent);
     fixture.detectChanges();
     tick();
-    fixture.componentInstance.form.get('state')?.patchValue('CA');// Had to add the optional postfix to allow for types to be happy here
+    fixture.componentInstance.form.get('state')?.patchValue('CA');
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
     let cityOption = compiled.querySelector('select[formcontrolname="city"] option:nth-child(2)');
@@ -396,34 +397,45 @@ describe('RestaurantComponent', () => {
     fixture.componentInstance.getStates = () => {}; //preventing getStates func from being called 
     fixture.detectChanges(); //detecting changes for createForm func to be called
     let stateFormControl1 = fixture.componentInstance.form.get('state');
-    expect(stateFormControl1?.enabled).toBe(false);// Had to add the optional postfix to allow for types to be happy here
+    expect(stateFormControl1?.enabled).toBe(false);
     fixture.componentInstance.getStates = storeGetStatesFunc;
     fixture.componentInstance.getStates();  //calling getStates func when we want it
     fixture.detectChanges();
     let stateFormControl2 = fixture.componentInstance.form.get('state');
-    expect(stateFormControl2?.enabled).toBe(true);// Had to add the optional postfix to allow for types to be happy here
+    expect(stateFormControl2?.enabled).toBe(true);
   }));
 
   it('city dropdown should be disabled until cities are populated', <any>fakeAsync((): void => {
     const fixture = TestBed.createComponent(RestaurantComponent);
     fixture.detectChanges(); //detecting changes for createForm func to be called
     let cityFormControl1 = fixture.componentInstance.form.get('city');
-    expect(cityFormControl1?.enabled).toBe(false);// Had to add the optional postfix to allow for types to be happy here
-    fixture.componentInstance.form.get('state')?.patchValue('CA');// Had to add the optional postfix to allow for types to be happy here
+    expect(cityFormControl1?.enabled).toBe(false);
+    fixture.componentInstance.form.get('state')?.patchValue('CA');
     fixture.detectChanges();
     let cityFormControl2 = fixture.componentInstance.form.get('city');
-    expect(cityFormControl2?.enabled).toBe(true);// Had to add the optional postfix to allow for types to be happy here
+    expect(cityFormControl2?.enabled).toBe(true);
   }));
 
   it('should reset list of cities when new state is selected', <any>fakeAsync((): void => {
     const fixture = TestBed.createComponent(RestaurantComponent);
     fixture.detectChanges(); //detecting changes for createForm func to be called
-    fixture.componentInstance.form.get('state')?.patchValue('CA');// Had to add the optional postfix to allow for types to be happy here
-    fixture.componentInstance.form.get('city')?.patchValue('Sacramento');// Had to add the optional postfix to allow for types to be happy here
+    fixture.componentInstance.form.get('state')?.patchValue('CA');
+    fixture.componentInstance.form.get('city')?.patchValue('Sacramento');
     fixture.detectChanges();
     expect(fixture.componentInstance.restaurants.value.length).toEqual(2);
-    fixture.componentInstance.form.get('state')?.patchValue('MO');// Had to add the optional postfix to allow for types to be happy here
+    fixture.componentInstance.form.get('state')?.patchValue('MO');
     fixture.detectChanges();
     expect(fixture.componentInstance.restaurants.value.length).toEqual(0);
+  }));
+
+  it('should call getRestaurants method with two string params', <any>fakeAsync((): void => {
+    const fixture = TestBed.createComponent(RestaurantComponent);
+    let getRestaurantsSpy = spyOn(injectedService, 'getRestaurants').and.returnValue(of(restaurantAPIResponse));
+    fixture.detectChanges();
+    fixture.componentInstance.form.get('state')?.patchValue('CA');
+    fixture.componentInstance.form.get('city')?.patchValue('Sacramento');
+    fixture.detectChanges();
+    tick();
+    expect(getRestaurantsSpy).toHaveBeenCalledWith('CA','Sacramento');
   }));
 });
