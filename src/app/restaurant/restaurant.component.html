@@ -1,10 +1,14 @@
 <div class="restaurants">
     <h2 class="page-header">Restaurants</h2>
     <!-- if restaurants has a length show the list -->
+
+    <div *ngIf="restaurants.isPending" class="loading">
+        loading...
+    </div>
     
     <!-- inside this container, show the following markup for each restaurant -->
-    <ng-container *ngIf="restaurants.length">
-        <div *ngFor="let restaurant of restaurants" class="restaurant">
+    <ng-container *ngIf="!restaurants.isPending && restaurants.value.length">
+        <div *ngFor="let restaurant of restaurants.value" class="restaurant">
             <img src="{{ restaurant.images.thumbnail | imageUrl }}" width="100" height="100">
             <h3>{{ restaurant.name }}</h3>
 
