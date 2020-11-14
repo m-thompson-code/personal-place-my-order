@@ -60,6 +60,8 @@ export class RestaurantComponent implements OnInit, OnDestroy {
   }
 
   onChanges(): void {
+    let state: string = "";
+
     const state__formState = this.form.get('state');
 
     if (!state__formState) {
@@ -67,18 +69,27 @@ export class RestaurantComponent implements OnInit, OnDestroy {
     }
 
     const stateChanges = state__formState.valueChanges.subscribe(val => {
-      console.log('state', val);
-
-      this.cities.isPending = true;
-      this.cities.value = [];
-
-      this.form.get('city')?.patchValue('');
+      this.restaurants.value = [];
 
       if (val) {
+        this.form.get('city')?.enable({
+          onlySelf: true,
+          emitEvent: false,
+        });
+
+        if (val !== state) {
+          this.form.get('city')?.patchValue('');
+        }
+
         this.getCities(val);
       } else {
-        this.cities = { value: [], isPending: false };
+        this.form.get('city')?.disable({
+          onlySelf: true,
+          emitEvent: false
+        });
       }
+
+      state = val || "";
     });
 
     this._sub2 = stateChanges;
@@ -90,12 +101,8 @@ export class RestaurantComponent implements OnInit, OnDestroy {
     }
 
     const cityChanges = city__formState.valueChanges.subscribe(val => {
-      console.log('city', val);
-
       if (val) {
         this.getRestaurants();
-      } else {
-        this.restaurants = { value: [], isPending: false };
       }
     });
 
@@ -106,10 +113,10 @@ export class RestaurantComponent implements OnInit, OnDestroy {
     this._sub4?.unsubscribe();
 
     this._sub4 = this.restaurantService.getStates().subscribe((res: ResponseData<State>) => {
-      this.form.get('state')?.enable();
-
       this.states.value = res.data;
       this.states.isPending = false;
+
+      this.form.get('state')?.enable();
     });
   }
 
@@ -117,17 +124,17 @@ export class RestaurantComponent implements OnInit, OnDestroy {
     this._sub5?.unsubscribe();
 
     this._sub5 = this.restaurantService.getCities(stateAbbrivation).subscribe((res: ResponseData<City>) => {
-      this.form.get('city')?.enable();
-
       this.cities.value = res.data;
       this.cities.isPending = false;
+
+      this.form.get('city')?.enable({
+        onlySelf: true,
+        emitEvent: false
+      });
     });
   }
 
   getRestaurants() {
-    this.restaurants.isPending = true;
-    this.restaurants.value = [];
-
     this._sub?.unsubscribe();
 
     this._sub = this.restaurantService.getRestaurants().subscribe((res: ResponseData<Restaurant>) => {
