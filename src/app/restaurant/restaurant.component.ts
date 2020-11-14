@@ -32,6 +32,7 @@ export class RestaurantComponent implements OnInit, OnDestroy {
   }
 
   private _sub?: Subscription;
+  private _sub2?: Subscription;
   constructor(private restaurantService: RestaurantService, 
     private fb: FormBuilder
   ) {
@@ -40,6 +41,10 @@ export class RestaurantComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.createForm();
+
+    this._sub2 = this.form.valueChanges.subscribe((val) => {
+      console.log(val);
+    });
 
     this.restaurants.isPending = true;
 
@@ -72,5 +77,6 @@ export class RestaurantComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this._sub?.unsubscribe();
+    this._sub2?.unsubscribe();
   }
 }
