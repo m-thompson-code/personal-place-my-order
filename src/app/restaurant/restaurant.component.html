@@ -1,6 +1,42 @@
 <div class="restaurants">
     <h2 class="page-header">Restaurants</h2>
 
+    <form class="form" [formGroup]="form">
+        <div class="form-group">
+            <label>State</label>
+            <select class="formControl" formControlName="state">
+                <option value="" *ngIf="states.isPending">Loading...</option>
+                <ng-container *ngIf="!states.isPending">
+                    <option value="">Choose a state</option>
+                    
+                    <!-- iterate through all states to create options with
+                    the short property as the value and the name displayed-->
+                    <ng-container *ngIf="states.value.length">
+                        <option *ngFor="let state of states.value" [value]="state.short">
+                            {{ state.name }}
+                        </option>
+                    </ng-container>
+                </ng-container>
+            </select>
+            </div>
+            <div class="form-group">
+            <label>City</label>
+            <select class="formControl" formControlName="city">
+                <option value="" *ngIf="cities.isPending">Loading...</option>
+                <ng-container *ngIf="!cities.isPending">
+                    <option value="">Choose a city</option>
+                    <!-- iterate through all cities to create options with
+                    the short property as the value and the name displayed-->
+                    <ng-container *ngIf="cities.value.length">
+                        <option *ngFor="let city of cities.value" [value]="city.name">
+                            {{ city.name }}
+                        </option>
+                    </ng-container>
+                </ng-container>
+            </select>
+        </div>
+    </form>
+
     <div class="restaurant loading" *ngIf="restaurants.isPending"></div>
     
     <ng-container *ngIf="restaurants.value.length">

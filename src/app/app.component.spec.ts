@@ -13,6 +13,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { RestaurantService } from './restaurant/restaurant.service';
 
 import { RestaurantComponent } from './restaurant/restaurant.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 class MockRestaurantService {
@@ -186,7 +187,7 @@ describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        AppRoutingModule, HttpClientModule
+        AppRoutingModule, HttpClientModule, ReactiveFormsModule
       ],
       declarations: [
         AppComponent, HomeComponent, RestaurantComponent, ImageUrlPipe

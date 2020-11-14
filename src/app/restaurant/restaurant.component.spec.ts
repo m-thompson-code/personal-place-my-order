@@ -1,7 +1,8 @@
-import { async, ComponentFixture, TestBed, tick, fakeAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, tick, fakeAsync, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs'; 
 import { ImageUrlPipe } from '../image-url.pipe';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { RestaurantComponent } from './restaurant.component';
 import { RestaurantService } from './restaurant.service';
@@ -108,10 +109,11 @@ describe('RestaurantComponent', () => {
   let component: RestaurantComponent;
   let fixture: ComponentFixture<RestaurantComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule
+        RouterTestingModule,
+        ReactiveFormsModule,
       ],
       providers: [{
         provide: RestaurantService,
@@ -286,6 +288,29 @@ describe('RestaurantComponent', () => {
     const compiled = fixture.debugElement.nativeElement;
     let loadingDiv = compiled.querySelector('.loading');
     expect(loadingDiv).toBe(null);
+  });
+
+  it('should have a form property with city and state keys', () => {
+    const fixture = TestBed.createComponent(RestaurantComponent);
+    fixture.detectChanges();
+    expect(fixture.componentInstance.form.controls.state).toBeTruthy();
+    expect(fixture.componentInstance.form.controls.city).toBeTruthy();
+  });
+
+  it('should show a state dropdown', () => {
+    const fixture = TestBed.createComponent(RestaurantComponent);
+    fixture.detectChanges();
+    const compiled = fixture.debugElement.nativeElement;
+    let stateSelect = compiled.querySelector('select[formcontrolname="state"]');
+    expect(stateSelect).toBeTruthy();
+  });
+
+  it('should show a city dropdown', () => {
+    const fixture = TestBed.createComponent(RestaurantComponent);
+    fixture.detectChanges();
+    const compiled = fixture.debugElement.nativeElement;
+    let citySelect = compiled.querySelector('select[formcontrolname="city"]');
+    expect(citySelect).toBeTruthy();
   });
 
 });
